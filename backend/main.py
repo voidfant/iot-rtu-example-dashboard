@@ -33,7 +33,7 @@ class ConnectionManager:
             await client.send_json([message.json()])
         else:
             for connection in self.active_connections:
-                await connection.send_json([message.json()])
+                await connection.send_text(message.json())
 
 
 manager = ConnectionManager()
@@ -50,7 +50,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         for msg in consumer:
             raw = msg[6].decode().split(';')
-            payload = {'id': int(raw[0]), 'timestamp': raw[1], 'altitude': float(raw[2])}
+            payload = {'id': int(raw[0]), 'timestamp': float(raw[1]), 'altitude': float(raw[2])}
             print(payload)
             await asyncio.sleep(0.01)
             await manager.broadcast(Message(**payload), websocket)

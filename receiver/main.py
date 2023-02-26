@@ -1,8 +1,5 @@
 from serial import *
 from kafka import KafkaProducer
-from copy import deepcopy
-from typing import Union
-from time import sleep
 
 producer = KafkaProducer(bootstrap_servers='localhost:9092')
 path = 'receiver/new_data.csv'

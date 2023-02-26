@@ -5,7 +5,7 @@ from typing import Union
 from time import sleep
 
 producer = KafkaProducer(bootstrap_servers='localhost:9092')
-path = 'receiver/test_data.csv'
+path = 'receiver/new_data.csv'
 
 
 with open(path) as f:

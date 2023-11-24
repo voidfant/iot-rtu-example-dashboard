@@ -465,7 +465,7 @@ function Graph() {
 
   useEffect(() => {
     if (!isPaused) {
-        ws.current = new WebSocket("ws://localhost:8000/api/socket");
+        ws.current = new WebSocket("ws://localhost:7162/api/socket");
         gettingData();
     }
 

@@ -1,20 +1,19 @@
 import asyncio
-
 from typing import List
-
-from models import Message
-
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.templating import Jinja2Templates
 
-from kafka import KafkaConsumer
+from kafka import KafkaConsumer, TopicPartition
+
+from models import Message
 
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
 
-consumer = KafkaConsumer('ti-monitor')
+consumer = KafkaConsumer(bootstrap_servers="localhost:9092")
+consumer.subscribe('ti-monitor')
+
 
 
 class ConnectionManager:
@@ -38,18 +37,6 @@ class ConnectionManager:
 
 manager = ConnectionManager()
 
-
-@app.get("/hello")
-def root(request: Request):
-    return templates.TemplateResponse("index.htm", {"request": request})
-
-# Package N;
-# Time (s);Altitude (m);
-# Total velocity (m/s);Total acceleration (m/s²);
-# Latitude (°);Longitude (°);
-# Air temperature (°C);Air pressure (mbar)
-
-
 @app.websocket("/api/socket")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
@@ -59,13 +46,7 @@ async def websocket_endpoint(websocket: WebSocket):
             payload = {
                         'id': int(raw[0]),
                         'timestamp': float(raw[1]),
-                        'altitude': float(raw[2]),
-                        'velocity': float(raw[3]),
-                        'acceleration': float(raw[4]),
-                        'latitude': float(raw[5]),
-                        'longitude': float(raw[6]),
-                        'temperature': float(raw[7]),
-                        'pressure': float(raw[8])
+                        'altitude': float(raw[2])
                        }
             print(payload)
             await asyncio.sleep(0.01)

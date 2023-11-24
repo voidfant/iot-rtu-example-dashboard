@@ -2,12 +2,6 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 
-
-// const static_data = [{id: 1, timestamp: 1.23, altitude: 100.23}, 
-//     {id: 2, timestamp: 1.43, altitude: 120.43}, 
-//     {id: 3, timestamp: 2.00, altitude: 133.00}];
-
-
 const AppWs = () => {
     const [isPaused, setIsPaused] = useState(false);
     const [data, setData] = useState(null);
@@ -27,7 +21,6 @@ const AppWs = () => {
             ws.current = new WebSocket("ws://localhost:8000/api/socket"); // создаем ws соединение
             ws.current.onopen = () => setStatus("Соединение открыто");  // callback на ивент открытия соединения
             ws.current.onclose = () => setStatus("Соединение закрыто"); // callback на ивент закрытия соединения
-
             gettingData();
         }
 
@@ -68,18 +61,7 @@ const AppWs = () => {
                     }}>{!isPaused ? 'Остановить соединение' : 'Открыть соединение' }</button>
                 </div>
             }
-            {!!ws_data &&
-                <div>
-                    <LineChart width={600} height={300} data={gData} margin={{ top: 5, right:20, bottom: 5, left: 5 }}>
-                        <Line type="monotone" dataKey="velocity" dot={false} />
-                        <Line type="monotone" dataKey="acceleration" dot={false} />
-                        <CartesianGrid stroke="#ccc" strokeDasharray="3 3"/>
-                        <XAxis dataKey="timestamp"/>
-                        <YAxis />
-                        <Tooltip />
-                    </LineChart>
-                </div>
-            }
+
         </>
     )
 }

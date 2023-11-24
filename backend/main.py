@@ -11,8 +11,15 @@ from models import Message
 
 app = FastAPI()
 
-consumer = KafkaConsumer(bootstrap_servers="localhost:9092")
-consumer.subscribe('ti-monitor')
+consumerFound = False
+
+while not consumerFound:
+    try:
+        consumer = KafkaConsumer(bootstrap_servers="kafka:9092")
+        consumer.subscribe('ti-monitor')
+        consumerFound=True
+    except Exception:
+        continue
 
 
 
@@ -52,5 +59,5 @@ async def websocket_endpoint(websocket: WebSocket):
             await asyncio.sleep(0.01)
             await manager.broadcast(Message(**payload), websocket)
 
-    except WebSocketDisconnect:
+    except Exception:
         manager.disconnect(websocket)

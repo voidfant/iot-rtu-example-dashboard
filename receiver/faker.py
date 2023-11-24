@@ -3,8 +3,8 @@ from time import sleep
 from kafka import KafkaProducer
 from random import uniform
 
-producer = KafkaProducer(bootstrap_servers='localhost:9092')
-path = 'receiver/new_data.csv'
+producer = KafkaProducer(bootstrap_servers='kafka:9092')
+path = './new_data.csv'
 
 with open(path) as f:
     raw_data = [x for x in f.read().split('\n')]
